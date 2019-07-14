@@ -1,4 +1,4 @@
-#WASM instructions
+# WASM instructions
 
 List of WASM instructions in WAT format
 
@@ -101,4 +101,34 @@ Formerly known as `get_global`
 
 Formerly known as `set_global`
 
-### `(i32.load [offset=0] [align=0] index-expr)`
+## Working with linear memory
+
+### `(type.load [offset=0] [align=0] index-expr)`
+
+Example:
+
+```webassembly
+(i32.load offset=4 (i32.const 0)) ;; load from main memory at 0 + 8
+(i32.load offset=4 (local.get $ptr)) ;; load from main memory at $ptr + 8
+(i32.load (local.get $ptr)) ;; load from main memory at $ptr
+```
+
+| Mnemonic      | Range                                               | Bit pattern                                                          |
+|:------------- |:--------------------------------------------------- |:-------------------------------------------------------------------- |
+| `i32.load`    | `[0, 2**32)`/`[-2**31, 2**31)`                      | `0bXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX`                                 |
+| `i32.load8_u` | `[0, 255]`                                          | `0b000000000000000000000000XXXXXXXX`                                 |
+| `i32.load8_s` | `[-128, 127]`                                       | `0bSSSSSSSSSSSSSSSSSSSSSSSSXXXXXXXX`                                 |
+| `i32.load16_u` | `[0, 2**16)`                                          | `0b0000000000000000XXXXXXXXXXXXXXXX`                                 |
+| `i32.load16_s` | `[-2**15, 2**15)`                                     | `0bSSSSSSSSSSSSSSSSXXXXXXXXXXXXXXXX`                                 |
+| `i64.load`    | `[0, 2**64)`/`[-2**63, 2**63)`                      | `0bXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX`                                 |
+| `i64.load8_u` | `[0, 255]`                                          | `0b00000000000000000000000000000000000000000000000000000000XXXXXXXX`                                 |
+| `i64.load8_s` | `[-128, 127]`                                       | `0bSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSXXXXXXXX`                                 |
+| `i64.load16_u` | `[0, 2**16)`                                          | `0b000000000000000000000000000000000000000000000000XXXXXXXXXXXXXXXX`                                 |
+| `i64.load16_s` | `[-2**15, 2**15)`                                     | `0bSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSXXXXXXXXXXXXXXXX`                                 |
+| `i64.load32_u` | `[0, 2**32)`                                          | `0b00000000000000000000000000000000XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX`                                 |
+| `i64.load32_s` | `[-2**31, 2**31)`                                     | `0bSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX`                                 |
+| `i64.load`    | `[0, 2**64)`/`[-2**63, 2**63)`                      | `0bXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX` |
+| `f32.load`    | IEEE 754 Single-Precision                           | `0bSEEEEEEEEFFFFFFFFFFFFFFFFFFFFFFF`                                 |
+| `f64.load`    | IEEE 754 Double-Precision<br/>(JavaScript `Number`) | `0bSEEEEEEEEEEEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF` |
+
+**Key**: `0`-bit value, `X` from value, `S` sign, `E` exponent, `F` fraction
