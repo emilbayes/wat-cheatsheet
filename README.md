@@ -6,6 +6,8 @@
 - [Mixing linear and S-expressions](#mixing-linear-and-s-expressions)
 - [Transforming S-expressions to linear representation](#transforming-s-expressions-to-linear-representation)
 - [Switch statements](#switch-statements)
+- [Styleguide](#styleguide)
+- [For loop](#for-loop)
 
 ## Instructions
 
@@ -13,11 +15,11 @@
 
 ## Useful tooling
 
-Webassembly language: https://github.com/Alhadis/language-webassembly
-Parinfer: https://shaunlebron.github.io/parinfer/
-Bracket Colorize: https://github.com/vn-ki/bracket-colorizer
-wat2wasm: https://github.com/emilbayes/wat2wasm
-wat2js (peer dependency on wat2wasm): https://github.com/mafintosh/wat2js
+* Webassembly language: https://github.com/Alhadis/language-webassembly
+* Parinfer: https://shaunlebron.github.io/parinfer/
+* Bracket Colorize: https://github.com/vn-ki/bracket-colorizer
+* wat2wasm: https://github.com/emilbayes/wat2wasm
+* wat2js (peer dependency on wat2wasm): https://github.com/mafintosh/wat2js
 
 ## Mixing linear and S-expressions
 
@@ -163,3 +165,23 @@ switch (branch) {
 
   (call $i32.log (get_local $x))
   (get_local $x))
+
+## For loop
+
+The following will loop from `$data.ptr` until `$data.end`, one byte at a time.
+Even though the convention in C is often to do `(unsigned char * ptr, size_t len)`
+in WASM it can often be easier to work with `($data.ptr i32, $data.end i32)`, as
+the bounds check becomes easier that way:
+
+```webassembly
+(local $data.ptr i32)
+
+(loop $continue
+  ;; Do something here one byte at a time
+  (drop (i32.load8_u (get_local $data.ptr)))
+
+  (br_if $continue
+         (i32.lt_u (tee_local $data.ptr (i32.add (get_local $data.ptr)
+                                                 (i32.const 1)))
+                   (get_local $data.end))))
+```
