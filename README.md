@@ -175,7 +175,9 @@ in WASM it can often be easier to work with `($data.ptr i32, $data.end i32)`, as
 the bounds check becomes easier that way:
 
 ```webassembly
+;; Maybe locals or params
 (local $data.ptr i32)
+(local $data.end i32)
 
 (loop $continue
   ;; Do something here one byte at a time
