@@ -165,6 +165,7 @@ switch (branch) {
 
   (call $i32.log (get_local $x))
   (get_local $x))
+```
 
 ## For loop
 
