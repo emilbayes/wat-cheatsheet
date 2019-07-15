@@ -113,7 +113,7 @@ Example:
 (i32.load (local.get $ptr)) ;; load from main memory at $ptr
 ```
 
-| Mnemonic      | Range                                               | Bit pattern                                                          |
+| Mnemonic      | Range                                               | Bit pattern<br/>(*Key*: `0`-bit value, `X` from value, `S` sign, `E` exponent, `F` fraction) |
 |:------------- |:--------------------------------------------------- |:-------------------------------------------------------------------- |
 | `i32.load`    | `[0, 2**32)`/`[-2**31, 2**31)`                      | `0bXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX`                                 |
 | `i32.load8_u` | `[0, 255]`                                          | `0b000000000000000000000000XXXXXXXX`                                 |
@@ -130,5 +130,3 @@ Example:
 | `i64.load`    | `[0, 2**64)`/`[-2**63, 2**63)`                      | `0bXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX` |
 | `f32.load`    | IEEE 754 Single-Precision                           | `0bSEEEEEEEEFFFFFFFFFFFFFFFFFFFFFFF`                                 |
 | `f64.load`    | IEEE 754 Double-Precision<br/>(JavaScript `Number`) | `0bSEEEEEEEEEEEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF` |
-
-**Key**: `0`-bit value, `X` from value, `S` sign, `E` exponent, `F` fraction
